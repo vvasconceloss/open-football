@@ -1,0 +1,9 @@
+[package]
+name = "application"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Open-source football management simulator"
+repository = "https://github.com/openfootball-manager/openfootball"
+
+[dependencies]

@@ -1,0 +1,7 @@
+src-tauri/target
+src-tauri/tauri.conf.json.bak
+src-tauri/.cargo
+src-tauri/Cargo.lock
+src-tauri/gen
+src-tauri/build
+src-tauri/dist

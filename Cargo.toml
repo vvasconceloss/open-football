@@ -1,0 +1,3 @@
+[workspace]
+resolver = "1"
+members = ["src/application","src/domain", "src/engine", "src/infrastructure", "src/tauri/src-tauri"]
