@@ -7,3 +7,12 @@ description = "Open-source football management simulator"
 repository = "https://github.com/openfootball-manager/openfootball"
 
 [dependencies]
+rand = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+derive_more = { workspace = true }
+uuid = { workspace = true }
+strum = { workspace = true }
+validator = { workspace = true }
+
+serde = { workspace = true }
