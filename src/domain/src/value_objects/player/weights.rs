@@ -1,7 +1,7 @@
 use crate::value_objects::player::{attributes::PlayerAttributes, position::Position};
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum Attribute {
     Vision,
     Composure,
@@ -23,7 +23,7 @@ pub enum Attribute {
 #[derive(Debug, Clone)]
 pub struct PositionWeights {
     pub position: Position,
-    pub weights: HashMap<Attribute, f32>,
+    pub weights: BTreeMap<Attribute, f32>,
 }
 
 impl PositionWeights {
@@ -32,12 +32,13 @@ impl PositionWeights {
     }
 
     pub fn is_valid(&self) -> bool {
-        (self.total_weights() - 1.0).abs() < f32::EPSILON
+        let tolerance = 1e-6;
+        (self.total_weights() - 1.0).abs() < tolerance
     }
 
     pub fn for_position(position: &Position) -> Self {
         use Attribute::*;
-        let mut weights = HashMap::new();
+        let mut weights = BTreeMap::new();
 
         let attributes = [
             Vision,
