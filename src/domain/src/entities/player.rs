@@ -33,6 +33,18 @@ impl Player {
         birth_date: NaiveDate,
         attributes: PlayerAttributes,
     ) -> Result<Self, DomainError> {
+        if last_name.trim().is_empty() || first_name.trim().is_empty() {
+            return Err(DomainError::Validation(
+                "The player's name cannot be empty or null.".to_string(),
+            ));
+        }
+
+        if !(0.0..=1.0).contains(&growth_potential) {
+            return Err(DomainError::Validation(
+                "Growth potential must be between 0.0 and 1.0".to_string(),
+            ));
+        }
+
         Ok(Self {
             id: PlayerId::from(Uuid::new_v4()),
             nation,
