@@ -16,3 +16,16 @@ pub enum Position {
     SS,  // Second Striker
     ST,  // Striker
 }
+
+impl Position {
+    pub fn category(&self) -> &'static str {
+        match self {
+            Position::GK => "Goalkeeer",
+            Position::RB | Position::CB | Position::LB | Position::RWB | Position::LWB => {
+                "Defensive"
+            }
+            Position::DM | Position::CM | Position::AM | Position::LM | Position::RM => "Midfield",
+            Position::LW | Position::RW | Position::SS | Position::ST => "Attacking",
+        }
+    }
+}
