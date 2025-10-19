@@ -196,3 +196,24 @@ impl PositionWeights {
         total
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn position_weights_should_sum_to_one() {
+        let weights = PositionWeights::for_position(&Position::CM);
+
+        let tolerance = 1e-6;
+        let total = weights.total_weights();
+
+        assert!(
+            (total - 1.0).abs() < tolerance,
+            "weights must sum to 1.0 (got {}, diff = {})",
+            total,
+            (total - 1.0).abs()
+        );
+        assert!(weights.is_valid());
+    }
+}

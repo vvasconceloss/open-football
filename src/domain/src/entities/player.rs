@@ -55,3 +55,60 @@ impl Player {
         current_ability + (current_ability * self.growth_potential).min(1.0 - current_ability)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        entities::nation::Nation,
+        value_objects::player::attributes::{
+            MentalAttributes, PhysicalAttributes, TechnicalAttributes,
+        },
+    };
+
+    use super::*;
+
+    fn sample_attributes() -> PlayerAttributes {
+        PlayerAttributes::Field {
+            mental: MentalAttributes {
+                vision: 70,
+                composure: 65,
+                positioning: 60,
+            },
+            physical: PhysicalAttributes {
+                pace: 75,
+                stamina: 70,
+                strength: 68,
+            },
+            technical: TechnicalAttributes {
+                passing: 72,
+                heading: 50,
+                tackling: 65,
+                dribbling: 74,
+                finishing: 60,
+            },
+        }
+    }
+
+    #[test]
+    fn create_player_successfully() {
+        let nation = Nation::new("Spain".to_string(), 100);
+        let birth_date = NaiveDate::parse_from_str(&"01-01-2000", "%d-%m-%Y")
+            .map_err(|_e| DomainError::Validation("The date of birth is invalid.".to_string()));
+
+        let player = Player::new(
+            nation.unwrap().id,
+            "Doe".to_string(),
+            "John".to_string(),
+            Position::CM,
+            0.25,
+            birth_date.unwrap(),
+            sample_attributes(),
+        )
+        .expect("Must create the player");
+
+        assert_eq!(player.last_name, "Doe");
+        assert_eq!(player.first_name, "John");
+        assert!(player.growth_potential >= 0.0);
+        assert!(player.growth_potential <= 1.0);
+    }
+}
