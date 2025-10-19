@@ -57,6 +57,13 @@ impl Player {
         })
     }
 
+    pub fn calculate_market_value(&self, current_date: NaiveDate) -> f32 {
+        let base = self.current_ability() * 1_000_000.0;
+        let age_factor = 1.0 - ((self.calculate_age(current_date) as f32 - 25.0).abs() / 30.0);
+
+        (base * age_factor).max(0.0)
+    }
+
     pub fn calculate_age(&self, current_date: NaiveDate) -> u8 {
         (current_date.year() - self.birth_date.year()) as u8
     }
