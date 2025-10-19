@@ -50,6 +50,12 @@ pub enum PlayerAttributes {
     },
 }
 
+impl AttributeWeight {
+    pub fn new(name: &'static str, weight: f32) -> Self {
+        Self { name, weight }
+    }
+}
+
 impl PlayerAttributes {
     pub fn attribute_value(&self, name: &str) -> Option<u8> {
         match self {
