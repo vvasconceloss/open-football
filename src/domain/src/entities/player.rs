@@ -5,7 +5,7 @@ use crate::{
         attributes::PlayerAttributes, position::Position, weights::PositionWeights,
     },
 };
-use chrono::NaiveDate;
+use chrono::{Datelike, NaiveDate};
 use derive_more::{Display, From};
 use uuid::Uuid;
 
@@ -55,6 +55,10 @@ impl Player {
             birth_date,
             attributes,
         })
+    }
+
+    pub fn calculate_age(&self, current_date: NaiveDate) -> u8 {
+        (current_date.year() - self.birth_date.year()) as u8
     }
 
     pub fn current_ability(&self) -> f32 {
