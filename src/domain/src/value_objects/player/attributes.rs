@@ -1,3 +1,5 @@
+use crate::value_objects::player::weights::Attribute;
+
 #[derive(Debug, Clone)]
 pub struct MentalAttributes {
     pub vision: u8,
@@ -33,7 +35,7 @@ pub struct GoalkeepingAttributes {
 #[derive(Debug, Clone, Copy)]
 pub struct AttributeWeight {
     pub weight: f32,
-    pub name: &'static str,
+    pub attribute: &'static Attribute,
 }
 
 #[derive(Debug, Clone)]
@@ -51,47 +53,47 @@ pub enum PlayerAttributes {
 }
 
 impl AttributeWeight {
-    pub fn new(name: &'static str, weight: f32) -> Self {
-        Self { name, weight }
+    pub fn new(attribute: &'static Attribute, weight: f32) -> Self {
+        Self { attribute, weight }
     }
 }
 
 impl PlayerAttributes {
-    pub fn attribute_value(&self, name: &str) -> Option<u8> {
+    pub fn get_attribute_value(&self, attribute: &Attribute) -> Option<u8> {
         match self {
             PlayerAttributes::Field {
                 mental,
                 physical,
                 technical,
-            } => match name {
-                "vision" => Some(mental.vision),
-                "composure" => Some(mental.composure),
-                "positioning" => Some(mental.positioning),
-                "pace" => Some(physical.pace),
-                "stamina" => Some(physical.stamina),
-                "strength" => Some(physical.strength),
-                "passing" => Some(technical.passing),
-                "heading" => Some(technical.heading),
-                "tackling" => Some(technical.tackling),
-                "dribbling" => Some(technical.dribbling),
-                "finishing" => Some(technical.finishing),
+            } => match attribute {
+                Attribute::Vision => Some(mental.vision),
+                Attribute::Composure => Some(mental.composure),
+                Attribute::Positioning => Some(mental.positioning),
+                Attribute::Pace => Some(physical.pace),
+                Attribute::Stamina => Some(physical.stamina),
+                Attribute::Strength => Some(physical.strength),
+                Attribute::Passing => Some(technical.passing),
+                Attribute::Heading => Some(technical.heading),
+                Attribute::Tackling => Some(technical.tackling),
+                Attribute::Dribbling => Some(technical.dribbling),
+                Attribute::Finishing => Some(technical.finishing),
                 _ => None,
             },
             PlayerAttributes::Goalkeeper {
                 mental,
                 physical,
                 technical,
-            } => match name {
-                "vision" => Some(mental.vision),
-                "composure" => Some(mental.composure),
-                "positioning" => Some(mental.positioning),
-                "pace" => Some(physical.pace),
-                "stamina" => Some(physical.stamina),
-                "strength" => Some(physical.strength),
-                "kicking" => Some(technical.kicking),
-                "handling" => Some(technical.handling),
-                "reflexes" => Some(technical.reflexes),
-                "aerial_reach" => Some(technical.aerial_reach),
+            } => match attribute {
+                Attribute::Vision => Some(mental.vision),
+                Attribute::Composure => Some(mental.composure),
+                Attribute::Positioning => Some(mental.positioning),
+                Attribute::Pace => Some(physical.pace),
+                Attribute::Stamina => Some(physical.stamina),
+                Attribute::Strength => Some(physical.strength),
+                Attribute::Kicking => Some(technical.kicking),
+                Attribute::Handling => Some(technical.handling),
+                Attribute::Reflexes => Some(technical.reflexes),
+                Attribute::AerialReach => Some(technical.aerial_reach),
                 _ => None,
             },
         }
