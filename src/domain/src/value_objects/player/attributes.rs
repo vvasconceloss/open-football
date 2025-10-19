@@ -51,6 +51,46 @@ pub enum PlayerAttributes {
 }
 
 impl PlayerAttributes {
+    pub fn attribute_value(&self, name: &str) -> Option<u8> {
+        match self {
+            PlayerAttributes::Field {
+                mental,
+                physical,
+                technical,
+            } => match name {
+                "vision" => Some(mental.vision),
+                "composure" => Some(mental.composure),
+                "positioning" => Some(mental.positioning),
+                "pace" => Some(physical.pace),
+                "stamina" => Some(physical.stamina),
+                "strength" => Some(physical.strength),
+                "passing" => Some(technical.passing),
+                "heading" => Some(technical.heading),
+                "tackling" => Some(technical.tackling),
+                "dribbling" => Some(technical.dribbling),
+                "finishing" => Some(technical.finishing),
+                _ => None,
+            },
+            PlayerAttributes::Goalkeeper {
+                mental,
+                physical,
+                technical,
+            } => match name {
+                "vision" => Some(mental.vision),
+                "composure" => Some(mental.composure),
+                "positioning" => Some(mental.positioning),
+                "pace" => Some(physical.pace),
+                "stamina" => Some(physical.stamina),
+                "strength" => Some(physical.strength),
+                "kicking" => Some(technical.kicking),
+                "handling" => Some(technical.handling),
+                "reflexes" => Some(technical.reflexes),
+                "aerial_reach" => Some(technical.aerial_reach),
+                _ => None,
+            },
+        }
+    }
+
     pub fn mental(&self) -> &MentalAttributes {
         match self {
             PlayerAttributes::Field { mental, .. } => mental,
