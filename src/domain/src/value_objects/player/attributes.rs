@@ -49,3 +49,19 @@ pub enum PlayerAttributes {
         technical: GoalkeepingAttributes,
     },
 }
+
+impl PlayerAttributes {
+    pub fn mental(&self) -> &MentalAttributes {
+        match self {
+            PlayerAttributes::Field { mental, .. } => mental,
+            PlayerAttributes::Goalkeeper { mental, .. } => mental,
+        }
+    }
+
+    pub fn physical(&self) -> &PhysicalAttributes {
+        match self {
+            PlayerAttributes::Field { physical, .. } => physical,
+            PlayerAttributes::Goalkeeper { physical, .. } => physical,
+        }
+    }
+}
