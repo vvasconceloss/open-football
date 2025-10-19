@@ -1,9 +1,11 @@
 use crate::{
+    entities::nation::NationId,
     errors::DomainError,
     value_objects::player::{
         attributes::PlayerAttributes, position::Position, weights::PositionWeights,
     },
 };
+use chrono::NaiveDate;
 use derive_more::{Display, From};
 use uuid::Uuid;
 
@@ -12,27 +14,33 @@ pub struct PlayerId(Uuid);
 
 pub struct Player {
     pub id: PlayerId,
+    pub nation: NationId,
     pub last_name: String,
     pub first_name: String,
     pub position: Position,
     pub growth_potential: f32,
+    pub birth_date: NaiveDate,
     pub attributes: PlayerAttributes,
 }
 
 impl Player {
     pub fn new(
+        nation: NationId,
         last_name: String,
         first_name: String,
         position: Position,
         growth_potential: f32,
+        birth_date: NaiveDate,
         attributes: PlayerAttributes,
     ) -> Result<Self, DomainError> {
         Ok(Self {
             id: PlayerId::from(Uuid::new_v4()),
+            nation,
             last_name: last_name,
             first_name: first_name,
             position,
             growth_potential,
+            birth_date,
             attributes,
         })
     }
