@@ -15,6 +15,7 @@ pub struct Player {
     pub last_name: String,
     pub first_name: String,
     pub position: Position,
+    pub growth_potential: f32,
     pub attributes: PlayerAttributes,
 }
 
@@ -23,6 +24,7 @@ impl Player {
         last_name: String,
         first_name: String,
         position: Position,
+        growth_potential: f32,
         attributes: PlayerAttributes,
     ) -> Result<Self, DomainError> {
         Ok(Self {
@@ -30,6 +32,7 @@ impl Player {
             last_name: last_name,
             first_name: first_name,
             position,
+            growth_potential,
             attributes,
         })
     }
@@ -37,5 +40,10 @@ impl Player {
     pub fn current_ability(&self) -> f32 {
         let weights = PositionWeights::for_position(&self.position);
         weights.calculate_ability(&self.attributes)
+    }
+
+    pub fn potential_ability(&self) -> f32 {
+        let current_ability = self.current_ability();
+        current_ability + (current_ability * self.growth_potential).min(1.0 - current_ability)
     }
 }
