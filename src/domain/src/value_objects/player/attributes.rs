@@ -30,6 +30,12 @@ pub struct GoalkeepingAttributes {
     pub aerial_reach: u8,
 }
 
+#[derive(Debug, Clone, Copy)]
+pub struct AttributeWeight {
+    pub weight: f32,
+    pub name: &'static str,
+}
+
 #[derive(Debug, Clone)]
 pub enum PlayerAttributes {
     Field {
