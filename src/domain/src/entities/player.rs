@@ -9,7 +9,7 @@ use chrono::{Datelike, NaiveDate};
 use derive_more::{Display, From};
 use uuid::Uuid;
 
-#[derive(Debug, Clone, PartialEq, Eq, From, Display)]
+#[derive(Debug, PartialEq, Eq, From, Display)]
 pub struct PlayerId(Uuid);
 
 pub struct Player {

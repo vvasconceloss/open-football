@@ -3,7 +3,7 @@ use uuid::Uuid;
 
 use crate::errors::DomainError;
 
-#[derive(Debug, Clone, PartialEq, Eq, From, Display)]
+#[derive(Debug, PartialEq, Eq, From, Display)]
 pub struct NationId(Uuid);
 
 pub struct Nation {
