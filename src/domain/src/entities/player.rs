@@ -115,7 +115,7 @@ mod tests {
     #[test]
     fn create_player_successfully() {
         let nation = Nation::new("Spain".to_string(), 100);
-        let birth_date = NaiveDate::parse_from_str(&"01-01-2000", "%d-%m-%Y")
+        let birth_date = NaiveDate::parse_from_str("01-01-2000", "%d-%m-%Y")
             .map_err(|_e| DomainError::Validation("The date of birth is invalid.".to_string()));
 
         let player = Player::new(
