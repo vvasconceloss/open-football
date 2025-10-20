@@ -22,7 +22,7 @@ impl Nation {
 
         Ok(Self {
             id: NationId::from(Uuid::new_v4()),
-            name: name,
+            name,
             reputation,
         })
     }

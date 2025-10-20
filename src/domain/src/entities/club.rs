@@ -28,7 +28,7 @@ impl Club {
 
         Ok(Self {
             id: ClubId::from(Uuid::new_v4()),
-            name: name,
+            name,
             reputation,
             nation,
             abbreviation,

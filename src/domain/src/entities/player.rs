@@ -48,8 +48,8 @@ impl Player {
         Ok(Self {
             id: PlayerId::from(Uuid::new_v4()),
             nation,
-            last_name: last_name,
-            first_name: first_name,
+            last_name,
+            first_name,
             position,
             growth_potential,
             birth_date,
