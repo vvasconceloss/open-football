@@ -26,7 +26,7 @@ impl Money {
         self.currency
     }
 
-    pub fn add(self, other: Money) -> Result<Money, DomainError> {
+    pub fn add_money(self, other: Money) -> Result<Money, DomainError> {
         if self.currency != other.currency {}
 
         Ok(Money {
