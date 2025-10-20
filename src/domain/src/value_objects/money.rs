@@ -27,8 +27,6 @@ impl Money {
     }
 
     pub fn add_money(self, other: Money) -> Result<Money, DomainError> {
-        if self.currency != other.currency {}
-
         Ok(Money {
             amount: self.amount + other.amount,
             currency: self.currency,
@@ -36,8 +34,6 @@ impl Money {
     }
 
     pub fn subtract(self, other: Money) -> Result<Money, DomainError> {
-        if self.currency != other.currency {}
-
         Ok(Money {
             amount: self.amount - other.amount,
             currency: self.currency,
