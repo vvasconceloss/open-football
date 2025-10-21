@@ -5,7 +5,7 @@ use crate::{
 use derive_more::{Display, From};
 use uuid::Uuid;
 
-#[derive(Debug, PartialEq, Eq, From, Display)]
+#[derive(Debug, PartialEq, Eq, From, Display, Clone)]
 pub struct NationId(Uuid);
 
 pub struct Nation {
