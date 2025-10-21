@@ -1,29 +1,43 @@
+use crate::{
+    errors::DomainError,
+    value_objects::{nation::name::NationName, reputation::Reputation},
+};
 use derive_more::{Display, From};
 use uuid::Uuid;
-
-use crate::errors::DomainError;
 
 #[derive(Debug, PartialEq, Eq, From, Display)]
 pub struct NationId(Uuid);
 
 pub struct Nation {
-    pub id: NationId,
-    pub name: String,
-    pub reputation: u8,
+    id: NationId,
+    name: NationName,
+    reputation: Reputation,
 }
 
 impl Nation {
-    pub fn new(name: String, reputation: u8) -> Result<Self, DomainError> {
-        if name.is_empty() {
-            return Err(DomainError::Validation(
-                "The name of a nation cannot be empty or null.".to_string(),
-            ));
-        }
-
+    pub fn new(name: NationName, reputation: Reputation) -> Result<Self, DomainError> {
         Ok(Self {
             id: NationId::from(Uuid::new_v4()),
             name,
             reputation,
         })
+    }
+
+    pub fn id(&self) -> &NationId {
+        &self.id
+    }
+
+    pub fn name(&self) -> &NationName {
+        &self.name
+    }
+
+    pub fn reputation(&self) -> &Reputation {
+        &self.reputation
+    }
+
+    pub fn increase_reputation(&mut self, new_reputation: Reputation) {
+        if new_reputation.as_u8() > self.reputation.as_u8() {
+            self.reputation = new_reputation;
+        }
     }
 }
