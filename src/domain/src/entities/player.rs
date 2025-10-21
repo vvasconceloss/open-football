@@ -2,7 +2,8 @@ use crate::{
     entities::nation::NationId,
     errors::DomainError,
     value_objects::player::{
-        attributes::PlayerAttributes, position::Position, weights::PositionWeights,
+        attributes::PlayerAttributes, growth_potential::GrowthPotential, name::PlayerName,
+        position::Position, weights::PositionWeights,
     },
 };
 use chrono::{Datelike, NaiveDate};
@@ -13,48 +14,61 @@ use uuid::Uuid;
 pub struct PlayerId(Uuid);
 
 pub struct Player {
-    pub id: PlayerId,
-    pub nation: NationId,
-    pub last_name: String,
-    pub first_name: String,
-    pub position: Position,
-    pub growth_potential: f32,
-    pub birth_date: NaiveDate,
-    pub attributes: PlayerAttributes,
+    id: PlayerId,
+    name: PlayerName,
+    nation: NationId,
+    position: Position,
+    growth_potential: GrowthPotential,
+    birth_date: NaiveDate,
+    attributes: PlayerAttributes,
 }
 
 impl Player {
     pub fn new(
+        name: PlayerName,
         nation: NationId,
-        last_name: String,
-        first_name: String,
         position: Position,
-        growth_potential: f32,
+        growth_potential: GrowthPotential,
         birth_date: NaiveDate,
         attributes: PlayerAttributes,
     ) -> Result<Self, DomainError> {
-        if last_name.trim().is_empty() || first_name.trim().is_empty() {
-            return Err(DomainError::Validation(
-                "The player's name cannot be empty or null.".to_string(),
-            ));
-        }
-
-        if !(0.0..=1.0).contains(&growth_potential) {
-            return Err(DomainError::Validation(
-                "Growth potential must be between 0.0 and 1.0".to_string(),
-            ));
-        }
-
         Ok(Self {
             id: PlayerId::from(Uuid::new_v4()),
+            name,
             nation,
-            last_name,
-            first_name,
             position,
             growth_potential,
             birth_date,
             attributes,
         })
+    }
+
+    pub fn id(&self) -> &PlayerId {
+        &self.id
+    }
+
+    pub fn name(&self) -> &PlayerName {
+        &self.name
+    }
+
+    pub fn nation(&self) -> &NationId {
+        &self.nation
+    }
+
+    pub fn position(&self) -> &Position {
+        &self.position
+    }
+
+    pub fn growth_potential(&self) -> &GrowthPotential {
+        &self.growth_potential
+    }
+
+    pub fn birth_date(&self) -> &NaiveDate {
+        &self.birth_date
+    }
+
+    pub fn attributes(&self) -> &PlayerAttributes {
+        &self.attributes
     }
 
     pub fn calculate_market_value(&self, current_date: NaiveDate) -> f32 {
@@ -65,7 +79,14 @@ impl Player {
     }
 
     pub fn calculate_age(&self, current_date: NaiveDate) -> u8 {
-        (current_date.year() - self.birth_date.year()) as u8
+        let mut age = (current_date.year() - self.birth_date.year()) as u8;
+        if current_date.month() < self.birth_date.month()
+            || (current_date.month() == self.birth_date.month()
+                && current_date.day() < self.birth_date.day())
+        {
+            age = age.saturating_sub(1);
+        }
+        age
     }
 
     pub fn current_ability(&self) -> f32 {
@@ -75,7 +96,8 @@ impl Player {
 
     pub fn potential_ability(&self) -> f32 {
         let current_ability = self.current_ability();
-        current_ability + (current_ability * self.growth_potential).min(1.0 - current_ability)
+        current_ability
+            + (current_ability * self.growth_potential.as_f32()).min(1.0 - current_ability)
     }
 }
 
@@ -83,8 +105,10 @@ impl Player {
 mod tests {
     use crate::{
         entities::nation::Nation,
-        value_objects::player::attributes::{
-            MentalAttributes, PhysicalAttributes, TechnicalAttributes,
+        value_objects::{
+            nation::name::NationName,
+            player::attributes::{MentalAttributes, PhysicalAttributes, TechnicalAttributes},
+            reputation::Reputation,
         },
     };
 
@@ -114,24 +138,27 @@ mod tests {
 
     #[test]
     fn create_player_successfully() {
-        let nation = Nation::new("Spain".to_string(), 100);
+        let nation_reputation = Reputation::new(100);
+        let nation_name = NationName::new("Spain".to_string());
+        let nation = Nation::new(nation_name.unwrap(), nation_reputation.unwrap()).unwrap();
+
         let birth_date = NaiveDate::parse_from_str("01-01-2000", "%d-%m-%Y")
             .map_err(|_e| DomainError::Validation("The date of birth is invalid.".to_string()));
 
         let player = Player::new(
-            nation.unwrap().id,
-            "Doe".to_string(),
-            "John".to_string(),
+            PlayerName::new("John".to_string(), "Doe".to_string()).unwrap(),
+            nation.id().clone(),
             Position::CM,
-            0.25,
+            GrowthPotential::new(0.25).unwrap(),
             birth_date.unwrap(),
             sample_attributes(),
         )
         .expect("Must create the player");
 
-        assert_eq!(player.last_name, "Doe");
-        assert_eq!(player.first_name, "John");
-        assert!(player.growth_potential >= 0.0);
-        assert!(player.growth_potential <= 1.0);
+        assert_eq!(player.name.last_name(), "Doe");
+        assert_eq!(player.name.first_name(), "John");
+
+        assert!(player.growth_potential().as_f32() >= 0.0);
+        assert!(player.growth_potential().as_f32() <= 1.0);
     }
 }
