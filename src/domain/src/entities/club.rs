@@ -12,6 +12,7 @@ use uuid::Uuid;
 #[derive(Debug, PartialEq, Eq, From, Display)]
 pub struct ClubId(Uuid);
 
+#[derive(Debug, PartialEq, Eq)]
 pub struct Club {
     id: ClubId,
     name: ClubName,
