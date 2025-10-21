@@ -7,3 +7,5 @@ description = "Open-source football management simulator"
 repository = "https://github.com/openfootball-manager/openfootball"
 
 [dependencies]
+domain = { path = "../domain" }
+thiserror = { workspace = true }
