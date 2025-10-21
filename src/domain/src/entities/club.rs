@@ -1,4 +1,7 @@
-use crate::{entities::nation::NationId, errors::DomainError};
+use crate::{
+    entities::{nation::NationId, player_contract::ContractId},
+    errors::DomainError,
+};
 use derive_more::{Display, From};
 use uuid::Uuid;
 
@@ -11,6 +14,7 @@ pub struct Club {
     pub reputation: u8,
     pub nation: NationId,
     pub abbreviation: String,
+    pub squad: Vec<ContractId>,
 }
 
 impl Club {
@@ -19,6 +23,7 @@ impl Club {
         reputation: u8,
         nation: NationId,
         abbreviation: String,
+        squad: Vec<ContractId>,
     ) -> Result<Self, DomainError> {
         if name.trim().is_empty() {
             return Err(DomainError::Validation(
@@ -32,6 +37,7 @@ impl Club {
             reputation,
             nation,
             abbreviation,
+            squad,
         })
     }
 }
