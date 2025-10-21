@@ -1,6 +1,10 @@
 use crate::{
     entities::{nation::NationId, player_contract::ContractId},
     errors::DomainError,
+    value_objects::{
+        club::{abbreviation::ClubAbbreviation, name::ClubName},
+        reputation::Reputation,
+    },
 };
 use derive_more::{Display, From};
 use uuid::Uuid;
@@ -9,35 +13,67 @@ use uuid::Uuid;
 pub struct ClubId(Uuid);
 
 pub struct Club {
-    pub id: ClubId,
-    pub name: String,
-    pub reputation: u8,
-    pub nation: NationId,
-    pub abbreviation: String,
-    pub squad: Vec<ContractId>,
+    id: ClubId,
+    name: ClubName,
+    nation: NationId,
+    squad: Vec<ContractId>,
+    reputation: Reputation,
+    abbreviation: ClubAbbreviation,
 }
 
 impl Club {
     pub fn new(
-        name: String,
-        reputation: u8,
+        name: ClubName,
         nation: NationId,
-        abbreviation: String,
         squad: Vec<ContractId>,
+        reputation: Reputation,
+        abbreviation: ClubAbbreviation,
     ) -> Result<Self, DomainError> {
-        if name.trim().is_empty() {
-            return Err(DomainError::Validation(
-                "The club name cannot be empty or null.".to_string(),
-            ));
-        }
-
         Ok(Self {
             id: ClubId::from(Uuid::new_v4()),
             name,
-            reputation,
             nation,
-            abbreviation,
             squad,
+            reputation,
+            abbreviation,
         })
+    }
+
+    pub fn id(&self) -> &ClubId {
+        &self.id
+    }
+
+    pub fn name(&self) -> &ClubName {
+        &self.name
+    }
+
+    pub fn nation(&self) -> &NationId {
+        &self.nation
+    }
+
+    pub fn squad(&self) -> &[ContractId] {
+        &self.squad
+    }
+
+    pub fn reputation(&self) -> &Reputation {
+        &self.reputation
+    }
+
+    pub fn abbreviation(&self) -> &ClubAbbreviation {
+        &self.abbreviation
+    }
+
+    pub fn change_reputation(&mut self, new_reputation: Reputation) {
+        self.reputation = new_reputation
+    }
+
+    pub fn add_player(&mut self, contract: ContractId) {
+        if !self.squad.contains(&contract) {
+            self.squad.push(contract)
+        }
+    }
+
+    pub fn remove_player(&mut self, contract_remove: &ContractId) {
+        self.squad.retain(|contract| contract != contract_remove);
     }
 }
