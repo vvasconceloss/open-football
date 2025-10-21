@@ -1,5 +1,6 @@
 use crate::{
-    entities::club::ClubId, errors::DomainError,
+    entities::{club::ClubId, competition::CompetitionId},
+    errors::DomainError,
     value_objects::fixture::fixture_result::FixtureResult,
 };
 use chrono::NaiveDate;
@@ -22,6 +23,7 @@ pub struct Fixture {
     pub away_club_id: ClubId,
     pub status: FixtureStatus,
     pub result: Option<FixtureResult>,
+    pub competition_id: CompetitionId,
 }
 
 impl Fixture {
@@ -30,6 +32,7 @@ impl Fixture {
         home_club_id: ClubId,
         away_club_id: ClubId,
         result: Option<FixtureResult>,
+        competition_id: CompetitionId,
     ) -> Result<Self, DomainError> {
         Ok(Self {
             id: FixtureId::from(Uuid::new_v4()),
@@ -38,6 +41,7 @@ impl Fixture {
             away_club_id,
             status: FixtureStatus::Scheduled,
             result,
+            competition_id,
         })
     }
 }
