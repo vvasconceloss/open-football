@@ -1,3 +1,4 @@
+#[derive(Debug, PartialEq)]
 pub struct ClubFixtureStatistics {
     pub goals: u8,
     pub shots: u8,
@@ -6,6 +7,7 @@ pub struct ClubFixtureStatistics {
     pub shots_on_target: u8,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct FixtureResult {
     pub home_stats: ClubFixtureStatistics,
     pub away_stats: ClubFixtureStatistics,
