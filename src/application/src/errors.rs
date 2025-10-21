@@ -1,3 +1,4 @@
+use domain::errors::DomainError;
 use thiserror::Error;
 
 #[derive(Debug, Error)]
@@ -34,4 +35,10 @@ pub enum ApplicationError {
 
     #[error("Unknown error: {0}")]
     Unknown(String),
+}
+
+impl From<DomainError> for ApplicationError {
+    fn from(err: DomainError) -> Self {
+        ApplicationError::DomainViolation(err.to_string())
+    }
 }
