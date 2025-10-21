@@ -1,5 +1,6 @@
 use crate::entities::club::ClubId;
 
+#[derive(Debug, PartialEq, Eq)]
 pub struct StandingRow {
     pub club_id: ClubId,
     pub wins: u32,
@@ -10,6 +11,7 @@ pub struct StandingRow {
     pub goals_conceded: u32,
 }
 
+#[derive(Debug, PartialEq, Eq)]
 pub struct Standing {
     pub entries: Vec<StandingRow>,
 }

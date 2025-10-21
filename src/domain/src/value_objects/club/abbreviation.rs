@@ -1,5 +1,6 @@
 use crate::errors::DomainError;
 
+#[derive(Debug, PartialEq, Eq)]
 pub struct ClubAbbreviation(String);
 
 impl ClubAbbreviation {
