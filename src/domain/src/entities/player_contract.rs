@@ -11,12 +11,12 @@ use uuid::Uuid;
 pub struct ContractId(Uuid);
 
 pub struct Contract {
-    pub id: ContractId,
-    pub club_id: ClubId,
-    pub player_id: PlayerId,
-    pub end_date: NaiveDate,
-    pub start_date: NaiveDate,
-    pub weekly_wage: Money,
+    id: ContractId,
+    club_id: ClubId,
+    player_id: PlayerId,
+    end_date: NaiveDate,
+    start_date: NaiveDate,
+    weekly_wage: Money,
 }
 
 impl Contract {
@@ -27,6 +27,12 @@ impl Contract {
         start_date: NaiveDate,
         weekly_wage: Money,
     ) -> Result<Self, DomainError> {
+        if start_date >= end_date {
+            return Err(DomainError::Validation(
+                "Contract start date must be strictly before the end date.".to_string(),
+            ));
+        }
+
         Ok(Contract {
             id: ContractId::from(Uuid::new_v4()),
             club_id,
@@ -35,5 +41,44 @@ impl Contract {
             start_date,
             weekly_wage,
         })
+    }
+
+    pub fn id(&self) -> &ContractId {
+        &self.id
+    }
+
+    pub fn club_id(&self) -> &ClubId {
+        &self.club_id
+    }
+
+    pub fn player_id(&self) -> &PlayerId {
+        &self.player_id
+    }
+
+    pub fn end_date(&self) -> &NaiveDate {
+        &self.end_date
+    }
+
+    pub fn start_date(&self) -> &NaiveDate {
+        &self.start_date
+    }
+
+    pub fn weekly_wage(&self) -> &Money {
+        &self.weekly_wage
+    }
+
+    pub fn extend_end_date(&mut self, new_end_date: NaiveDate) -> Result<(), DomainError> {
+        if new_end_date <= self.end_date {
+            return Err(DomainError::Unknown(
+                "New end date must be after the current contract end date.".to_string(),
+            ));
+        }
+
+        self.end_date = new_end_date;
+        Ok(())
+    }
+
+    pub fn update_wage(&mut self, new_wage: Money) {
+        self.weekly_wage = new_wage;
     }
 }
