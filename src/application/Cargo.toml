@@ -10,4 +10,5 @@ repository = "https://github.com/openfootball-manager/openfootball"
 domain = { path = "../domain" }
 
 uuid = { workspace = true }
+chrono = { workspace = true }
 thiserror = { workspace = true }
