@@ -8,4 +8,6 @@ repository = "https://github.com/openfootball-manager/openfootball"
 
 [dependencies]
 domain = { path = "../domain" }
+
+uuid = { workspace = true }
 thiserror = { workspace = true }
